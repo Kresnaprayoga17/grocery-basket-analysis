@@ -66,9 +66,18 @@ def return_item_df(item_antecedents):
     data["antecedents"] = data["antecedents"].apply(parse_list)
     data["consequents"] = data["consequents"].apply(parse_list)
 
-    return list(data.loc[data["antecedents"] == item_antecedents].iloc[0,:])
+    filtered_data = data.loc[data["antecedents"] == item_antecedents]
+
+    if not filtered_data.empty:
+        return list(filtered_data.iloc[0, :])
+    else:
+        return []
 
 if type(data) != type("No Result!"):
     st.markdown("Hasil Rekomendasi : ")
-    st.success(f"Jika Konsumen Membeli **{item}**, maka membeli **{return_item_df(item)[1]}** secara bersamaan")
+    result = return_item_df(item)
+    if result :
+        st.success(f"Jika Konsumen Membeli **{item}**, maka membeli **{return_item_df(item)[1]}** secara bersamaan")
+    else:
+        st.warning("Tidak ditemukan rekomendasi untuk item yang dipilih")
     
